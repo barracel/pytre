@@ -3,7 +3,7 @@ Tail recursion elimination in python
 ====================================
 
 Python does not support tail call recursion elimination by design.
-Much has been discussed about that and Guido closed the discussion with a
+Much has been talked about that and Guido closed the issue with a
 blog post:
 http://neopythonic.blogspot.com.es/2009/04/tail-recursion-elimination.html
 
