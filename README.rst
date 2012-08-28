@@ -20,8 +20,9 @@ break recursion.
 
 tre.tre_trampoline
 ------------------
-More elaborated decorator that is thread safe, handles mutual recursion
- and works with any function.
+
+More elaborated decorator that is thread safe, handles mutual recursion and
+works with any function.
 
 Uses the `trampoline <http://en.wikipedia.org/wiki/Trampoline_%28computers%29>`_
 technique to avoid recursion.
