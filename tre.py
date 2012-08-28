@@ -1,5 +1,7 @@
-import functools
+import collections
 import contextlib
+import functools
+import threading
 
 @contextlib.contextmanager
 def recursive_identity(func):
@@ -16,8 +18,7 @@ def recursive_identity(func):
     finally:
         func.__globals__[func.__name__] = original
 
-def tre(func):
-    @functools.wraps(func)
+def tre_global(func):
     def wraps(*args, **kwargs):
         with recursive_identity(func) as ri:
             res = (args, kwargs)
@@ -25,4 +26,29 @@ def tre(func):
                 ri['called'] = False
                 res = func(*res[0], **res[1])
             return res
+    return wraps
+
+
+Call = collections.namedtuple('Call', ('func', 'args', 'kwargs'))
+
+_local = threading.local()
+_local.tre = {'trampoline': False, 'call': False}
+
+def tre_trampoline(func):
+    @functools.wraps(func)
+    def wraps(*args, **kwargs):
+        if not _local.tre['trampoline']:
+            _local.tre['trampoline'] = True
+            obj = Call(func, args, kwargs)
+            while isinstance(obj, Call):
+                obj = obj.func(*obj.args, **obj.kwargs)
+            _local.tre['trampoline'] = False
+            return obj
+        else:
+            if _local.tre['call']:
+                _local.tre['call'] = False
+                return Call(func, args, kwargs)
+            else:
+                _local.tre['call'] = True
+                return func(*args, **kwargs)
     return wraps
