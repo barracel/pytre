@@ -1,6 +1,6 @@
-====================================
-Tail recursion elimination in python
-====================================
+=============================================================
+Tail recursion elimination / Tail call optimization in python
+=============================================================
 
 Python does not support tail call recursion elimination by design.
 Much has been talked about that and Guido closed the issue with a
